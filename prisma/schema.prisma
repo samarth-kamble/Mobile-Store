@@ -81,3 +81,33 @@ model TwoFactorConfirmation {
 
     @@unique([userId])
 }
+
+model Product {
+    id          String   @id @default(cuid())
+    name        String
+    description String
+    price       Decimal
+    stock       Int      @default(0) // Stock availability
+    images      String[] // Cloudinary image URLs
+
+    // Mobile & Laptop Specific Fields
+    brand       String
+    model       String
+    processor   String?
+    ram         String? // Example: 8GB, 16GB
+    storage     String? // Example: 256GB SSD, 1TB HDD
+    screenSize  String? // Example: 15.6", 6.5"
+    batteryLife String? // Example: 8 hours, 5000mAh
+
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Category {
+    id       String    @id @default(cuid())
+    name     String    @unique
+    products Product[]
+}
